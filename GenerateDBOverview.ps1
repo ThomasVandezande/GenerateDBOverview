@@ -1,4 +1,3 @@
-
 import-module ./logging.ps1
 import-module ./functions.ps1
 New-LogWriter -Location C:\Temp\Scripts\ -Type "DBReport"
@@ -16,10 +15,7 @@ $credential = get-cred -CredLocation "C:\Temp\Scripts\CredentialSQL.xml"
 
 
 foreach ($server in $ServerInfo){
-    switch ($server.domain){
-        "core.local" {$WindowsAuth = $true}
-        default {$WindowsAuth = $false}
-    }
+
 
     ##TODO Windows auth
     <#
