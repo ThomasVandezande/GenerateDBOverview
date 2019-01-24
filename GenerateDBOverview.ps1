@@ -33,9 +33,18 @@ foreach ($server in $ServerInfo){
         ""{$SQLInstance = $server.SERVER}
         default{$SQLInstance = ($server.SERVER +"." + $server.DOMAIN + "\" + $server.INSTANCE)}
     }
-    write-host "Connecting to $SQLInstance"
-    $databasesinfo = invoke-sqlcmd2 -ServerInstance $SQLInstance -Database "infodb" -Query "select * from overzichtdatabases" -Credential $credential
-    $DatabasesPresent = invoke-sqlcmd2 -ServerInstance $SQLInstance -Database "master" -Query "SELECT name FROM dbo.sysdatabases where name not in ('master','tempdb','model','msdb','infodb')" -Credential $credential
+    Write-LogMessage -severity 'Info' -LogMessage "Connecting to $SQLInstance"
+    try{
+        $databasesinfo = invoke-sqlcmd2 -ServerInstance $SQLInstance -Database "infodb" -Query "select * from overzichtdatabases" -Credential $credential -erroraction stop
+        $DatabasesPresent = invoke-sqlcmd2 -ServerInstance $SQLInstance -Database "master" -Query "SELECT name FROM dbo.sysdatabases where name not in ('master','tempdb','model','msdb','infodb')" -Credential $credential -erroraction stop
+    }catch{
+        switch -wildcard($error[0]){
+        "*error: 40*"{Write-LogMessage -Severity 'Warning' -LogMessage "Could not connect to $SQLInstance, check for network connectivity"}
+        "*Login failed for user*" {Write-LogMessage -Severity 'Warning' -LogMessage "Could login on $SQLInstance with user $($credential.username)"}
+        default {Write-LogMessage -Severity 'Error' -LogMessage "An unidentified error occurered whilst connecting to $SQLInstance. Full message: $($Error[0])"}
+        }
+        continue
+    }
     
     foreach($db in $databasesinfo){
         
