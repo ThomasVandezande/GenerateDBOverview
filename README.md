@@ -1,7 +1,7 @@
 # GenerateDBOverview
 This script will take a CSV file in the format found in CSV file 'Example.csv'.
 
-#Detailed description
+# Detailed description
 The script takes a CSV file with server names, instance names and domain names.
 After loading the instances a PS Credential will be imported (Import-CliXml).
 
