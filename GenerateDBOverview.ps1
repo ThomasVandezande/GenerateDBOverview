@@ -1,17 +1,24 @@
-import-module ./logging.ps1
-import-module ./functions.ps1
-New-LogWriter -Location C:\Temp\Scripts\ -Type "DBReport"
+import-module Logging
+import-module GenericFunctions
+
+#Initiate a new logfile
+Start-LogWriter -Location C:\Temp\Scripts\ -Type "DBReport"
 
 
+#Location for the output file
+$OutFile = 'C:\Temp\Scripts\databases.csv'
+
+#If the CSV output file allready exist, remove it as we will append it.
+CheckFile -FileToCheck $OutFile
 
 #Fetch the servers
-$ServerInfo = get-csv -CSVLocation "C:\Temp\Scripts\SERVERS.csv"
+$ServerInfo = Get-CSV -CSVLocation "C:\Temp\Scripts\SERVERS.csv"
 
 #Make a list of all domains
 $domains = $ServerInfo | Sort-Object -Property Domain -Unique | select Domain
 
 #Get the SQL credential
-$credential = get-cred -CredLocation "C:\Temp\Scripts\CredentialSQL.xml"
+$credential = Get-Cred -CredLocation "C:\Temp\Scripts\CredentialSQL.xml"
 
 
 foreach ($server in $ServerInfo){
@@ -48,7 +55,7 @@ foreach ($server in $ServerInfo){
     
     foreach($db in $databasesinfo){
         
-       $db | select @{Name = "SQL Instance"; Expression = {$SQLInstance}}, databasename, responsible, description, applicatie, subapplicatie, extra-info  | Export-Csv -Path C:\Temp\scripts\databases.csv -Append -NoTypeInformation
+       $db | select @{Name = "SQL Instance"; Expression = {$SQLInstance}}, databasename, responsible, description, applicatie, subapplicatie, extra-info  | Export-Csv -Path $OutFile -Append -NoTypeInformation
 
        $DatabasesPresent | ?{$_.name -notin $db.databasename} | %{$DatabasesPresent = ($DatabasesPresent | where {$_.name -ne $db.databasename})}
 
@@ -61,8 +68,14 @@ foreach ($server in $ServerInfo){
 
 }
 
+#Import the generated CSV File
+$databases = Get-CSV -CSVLocation $OutFile
 
-Finish-Logwriter
+#Generate the HTML file based on the databases
+Export-HTMLFile -Content $databases -OutputLocation "c:\temp\scripts\output.html" -Title "SQL Databases Overview"
+
+
+Stop-Logwriter
 
 
 
