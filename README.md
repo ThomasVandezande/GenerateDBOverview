@@ -26,4 +26,18 @@ This CSV file can be used for other purposes like generating a webpage or can se
 Also logging is included to catch critical errors and foresee debugging.
 
 # Dependencies
-We use the 'invoke-sqlcmd2' module to allow the usage of PSCredential object for authentication. The CMDLet is included in 'functions.ps1' to allow standalone usage without internet connection.
+We use the 'invoke-sqlcmd2' module to allow the usage of PSCredential object for authentication. The latest version (at the time of writing) is included in the 'GenericFunctions' module.
+
+# Installation
+- Copy all content of the 'Modules' folder to:
+    - c:\Program files\WindowsPowershell\Modules OR
+    - c:\username\documents\WindowsPowershell\Modules
+    
+- Fix the paths used in the 'GenerateDBOverview' script to your own environment.
+- Run 'GenerateDBOverview'.
+
+# TODO
+- Support Windows authentication for connection to SQL
+- Rewrite 'GenerateDBOverview' as a function to support all file locations provided as variables
+
+
