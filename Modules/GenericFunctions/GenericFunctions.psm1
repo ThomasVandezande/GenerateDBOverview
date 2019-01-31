@@ -758,7 +758,7 @@ Function Export-HTMLFile{
         .SYNOPSIS
             Converts a generated CSV file to a HTML file that can be used for publishing.
         .EXAMPLE
-            Generate-HTMLFile -Content $Databases -OutputLocation c:\inetpub\index.html
+            Export-HTMLFile -Content $Databases -OutputLocation c:\inetpub\index.html
 
             This will output the table content in '$Databases' to 'c:\inetpub\index.html' in the form of a HTML file
         .DESCRIPTION

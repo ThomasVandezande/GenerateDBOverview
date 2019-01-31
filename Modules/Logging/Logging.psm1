@@ -70,7 +70,7 @@ function Stop-LogWriter(){
         .SYNOPSIS
             Writes a last line to the logfile.
         .EXAMPLE
-            Finish-LogWriter
+            Stop-LogWriter
         .DESCRIPTION
             When called the function will add a finishing line to the logfile.
             Can be modified.
