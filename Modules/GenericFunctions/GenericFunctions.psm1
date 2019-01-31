@@ -753,7 +753,7 @@ Function CheckFile{
     }
 }
 
-Function Generate-HTMLFile{
+Function Export-HTMLFile{
     <#
         .SYNOPSIS
             Converts a generated CSV file to a HTML file that can be used for publishing.
