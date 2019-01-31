@@ -23,12 +23,12 @@ function Create-LogSource(){
 }
 #>
 
-function New-LogWriter(){
+function Start-LogWriter(){
    <#
         .SYNOPSIS
             Creates a new logfile at the specified location.
         .EXAMPLE
-            New-LogWriter -Location C:\Temp\Scripts\ -Type "DBReport"
+            Start-LogWriter -Location C:\Temp\Scripts\ -Type "DBReport"
         .DESCRIPTION
             The function takes a location and type as parameter.
             It will create a text file at the specified location where the filename contains:
@@ -65,7 +65,7 @@ function New-LogWriter(){
 
 }
 
-function Finish-LogWriter(){
+function Stop-LogWriter(){
    <#
         .SYNOPSIS
             Writes a last line to the logfile.
@@ -96,7 +96,7 @@ function Write-LogMessage{
 
             This will write a Critical severity entry in the log file and stop execution of the script afterwards.
         .DESCRIPTION
-            When called it appends a line to an existing logfile created with 'New-Logwriter'.
+            When called it appends a line to an existing logfile created with 'Start-LogWriter'.
             If the severity 'Critical' is provided the function will write a last entry in the logfile and call the 'Finish-LogWriter' function.
 
             The line of the log will be build as following:
@@ -142,4 +142,3 @@ function Write-LogMessage{
 
 }
 
-Export-ModuleMember New-LogWriter,Finish-LogWriter,Write-LogMessage
