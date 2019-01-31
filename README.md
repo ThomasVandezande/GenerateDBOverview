@@ -31,7 +31,7 @@ We use the 'invoke-sqlcmd2' module to allow the usage of PSCredential object for
 # Installation
 - Copy all content of the 'Modules' folder to:
     - c:\Program files\WindowsPowershell\Modules OR
-    - c:\username\documents\WindowsPowershell\Modules
+    - c:\users\YOUR_USERNAME\documents\WindowsPowershell\Modules
     
 - Fix the paths used in the 'GenerateDBOverview' script to your own environment.
 - Run 'GenerateDBOverview'.
