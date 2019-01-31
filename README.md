@@ -39,5 +39,6 @@ We use the 'invoke-sqlcmd2' module to allow the usage of PSCredential object for
 # TODO
 - Support Windows authentication for connection to SQL
 - Rewrite 'GenerateDBOverview' as a function to support all file locations provided as variables
+- Write entry to log when DB is not present in the 'master' but is in the 'infodb'. Reverse situation is allready implemented.
 
 
