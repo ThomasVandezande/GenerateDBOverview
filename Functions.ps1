@@ -722,3 +722,85 @@ function Get-Cred(){
         Write-LogMessage -Severity "Critical" -LogMessage "Loading Credentials failed with error: $($error[0])"  
     }
 }
+
+Function CheckFile{
+     <#
+        .SYNOPSIS
+            Checks if a file exists. If it does, we delete it.
+        .EXAMPLE
+            CheckFile -FileToCheck "c:\temp\test.txt"
+
+            If file test.txt exists in that location, it will be deleted.
+        .DESCRIPTION
+            Function checks for the existance of a file and deletes it whenever it is there.
+                    
+        .PARAMETER FileToCheck
+            Full path to the file to check for existance
+           
+    #>
+
+     Param(
+    [parameter(Mandatory=$true)]
+    [String[]]$FileToCheck
+    )   
+
+    if(Test-path $OutFile){
+        try{
+            Remove-Item $FileToCheck
+        }catch{
+            Write-LogMessage -Severity "Critical" -LogMessage "Failed to $($FileToCheck) because: $($Error[0])"
+        }
+    }
+}
+
+Function Generate-HTMLFile{
+    <#
+        .SYNOPSIS
+            Converts a generated CSV file to a HTML file that can be used for publishing.
+        .EXAMPLE
+            Generate-HTMLFile -Content $Databases -OutputLocation c:\inetpub\index.html
+
+            This will output the table content in '$Databases' to 'c:\inetpub\index.html' in the form of a HTML file
+        .DESCRIPTION
+            Function is an expansion on the 'ConvertTo-HTML' function provided by Powershell.
+
+            As the CSS is defined inside the function it is not needed to include it in every script.
+            Also instead of keeping the HTML inside your script it is immediatly placed on the location provided.
+                    
+        .PARAMETER Content
+            Content to be placed inside the 'body' tags of the HTML file. Needs to be formatted as an array of objects.
+
+        .PARAMETER OutputLocation
+            Location where you want the output file to be placed.
+        
+        .PARAMETER Title
+            Title you want for the HTML file
+           
+    #>
+
+        Param(
+    [parameter(Mandatory=$true)]
+    [Object[]]$Content,
+    [String]$OutputLocation,
+    [String]$Title
+    )
+
+    CheckFile -FileToCheck $OutputLocation
+
+    $css = @"
+    <style>
+    h1, h5, th { text-align: center; font-family: Segoe UI; }
+    table { margin: auto; font-family: Segoe UI; box-shadow: 10px 10px 5px #888; border: thin ridge grey; }
+    th { background: #0046c3; color: #fff; max-width: 400px; padding: 5px 10px; }
+    td { font-size: 11px; padding: 5px 20px; color: #000; }
+    tr { background: #b8d1f3; }
+    tr:nth-child(even) { background: #dae5f4; }
+    tr:nth-child(odd) { background: #b8d1f3; }
+    </style>
+"@
+
+    $Content | ConvertTo-Html  -Head $css -Title $Title | Out-File $OutputLocation
+
+}
+
+
