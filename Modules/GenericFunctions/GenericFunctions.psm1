@@ -744,7 +744,7 @@ Function CheckFile{
     [String[]]$FileToCheck
     )   
 
-    if(Test-path $OutFile){
+    if(Test-path $FileToCheck){
         try{
             Remove-Item $FileToCheck
         }catch{
